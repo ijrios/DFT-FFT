@@ -3,16 +3,16 @@ clear all;
 close all; 
 clc;
 
-%% Señal de información 
+%% SeÃ±al de informaciÃ³n 
 rango = [0,1]; %Generanmos 0 y 1 con probabilidad variable
-size = [1,64]; % Tamaño de matriz 
+size = [1,256]; % TamaÃ±o de matriz 
 bits = randi(rango,size);
-disp(['Señal de información: ' num2str(bits)]);
+disp(['SeÃ±al de informaciÃ³n: ' num2str(bits)]);
 M = 16;
 b = log2(M);
 l = (M)^1/2;
 
-%% Representación de la señal de info binaria como señal digital
+%% RepresentaciÃ³n de la seÃ±al de info binaria como seÃ±al digital
 x = bits;
 bperiodo = 0.0002; 
 paso = bperiodo/100;
@@ -29,20 +29,8 @@ for n=1:1:length(x)
 end
 
 
-figure(1)
-subplot(3,1,1);
-plot(t1,bit,'lineWidth',1);grid on;
-axis([ 0 bperiodo*length(x) -0.5 1.5]);
-ylabel('Amplitud(v)');
-xlabel('Tiempo(s)');
-title('Señal de informacion');
-s=length(x);%tamañoo del vector X
-t=0:bperiodo:bperiodo*s/4-bperiodo;%vector tiempo
-df=fs/(s-1); 
-f=-fs/8:df:fs/8; %vector frecuencia
-
 %% XXXXXXXXXXXXXXXXXXXXXX modulacion 64QAM  XXXXXXXXXXXXXXXXXXXXXXXXXXX
-% Convertimos señal a decimales para modular 
+% Convertimos seÃ±al a decimales para modular 
 seq = bits';
 p = reshape(seq,4,[])'; % 4 columnas / 16 caracteres (64bits)
 p1 = num2str(p); % convertimos bits a caracteres
@@ -57,23 +45,35 @@ y2 = y';
 x1 = real(ifft(y2)); % modula la portadora de alta frecuencia
 y3=fft(x1);%tranformada discreta de fourier
 ws=abs(y3);%magnitud coeficientes
-sound(x1,fs); % escuchamos la señal
+sound(x1,fs); % escuchamos la seÃ±al
 
-%XXXXXXXXXXXXXXXXXXXXXX Gráficas  XXXXXXXXXXXXXXXXXXXXXXXXXXX
+%XXXXXXXXXXXXXXXXXXXXXX GrÃ¡ficas  XXXXXXXXXXXXXXXXXXXXXXXXXXX
 figure(1)
-subplot(3,1,2);
-stem(t,x1,'lineWidth',1);grid on;
+subplot(3,1,1);
+plot(t1,bit,'lineWidth',1);grid on;
+axis([ 0 bperiodo*length(x) -0.5 1.5]);
 ylabel('Amplitud(v)');
 xlabel('Tiempo(s)');
-title('Señal modulada');
+title('SeÃ±al de informacion');
+grid on;
+s=length(x);%tamaÃ±o del vector X
+t=0:bperiodo:bperiodo/4*s-bperiodo;%vector tiempo
+f0=fs/length(t); 
+f=-fs/2:f0:fs/2-f0; %vector frecuencia
 
-figure(1)
+subplot(3,1,2);
+stem(t,x1,'lineWidth',1);grid on;
+axis([ 0 bperiodo*length(x1) -1 1]);
+ylabel('Amplitud(v)');
+xlabel('Tiempo(s)');
+title('SeÃ±al modulada');
+
 subplot(3,1,3);
 stem(f,fftshift(ws),'lineWidth',1);grid on;
-ylabel('Amplitud(v)');
+ylabel('Amplitud(v^2)');
 xlabel('Frecuencia(Hz)');
 title('Grafica Espectro De Magnitud'); 
 
-figure(2)
+
 scatterplot(yy),grid on;
 title('Diagrama de constelaciones 64QAM');
