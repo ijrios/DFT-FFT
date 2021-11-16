@@ -1,4 +1,4 @@
-### Transformada Discreta de Fourier (DFT) y Transformada Rápida de Fourier (FFT).
+# Transformada Discreta de Fourier (DFT) y Transformada Rápida de Fourier (FFT).
 
 
 ## 1. Análisis de Fourier:
